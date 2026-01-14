@@ -377,7 +377,7 @@ This project is licensed under the AGPL License - see the [LICENSE](LICENSE) fil
 
 - Built with [Tauri](https://tauri.app/) - The secure framework for building desktop apps
 - [Claude](https://claude.ai) by Anthropic
-- Original opcode project by [Asterisk](https://asterisk.so/)
+- Original doggy project by [Asterisk](https://asterisk.so/)
 - Inspired by [claude-code-open](https://github.com/chenxingqiang/claude-code-open)
 
 ---

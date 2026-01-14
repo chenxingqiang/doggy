@@ -3547,7 +3547,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4895175b425cb1f87721b59f0f286c2092bd4af812243672510e1ac53e2e0ad"
 
 [[package]]
-name = "opcode"
+name = "doggy"
 version = "0.2.1"
 dependencies = [
  "anyhow",

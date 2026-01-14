@@ -65,11 +65,11 @@ rebuild: clean build run
 
 # Run web server mode for phone access
 web: build-frontend
-    cd src-tauri && cargo run --bin opcode-web
+    cd src-tauri && cargo run --bin doggy-web
 
 # Run web server on custom port
 web-port PORT: build-frontend
-    cd src-tauri && cargo run --bin opcode-web -- --port {{PORT}}
+    cd src-tauri && cargo run --bin doggy-web -- --port {{PORT}}
 
 # Get local IP for phone access
 ip:

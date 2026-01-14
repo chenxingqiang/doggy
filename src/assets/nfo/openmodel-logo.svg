@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1456" height="816" viewBox="0 0 1456 816" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Cyberpunk gradient for the icon -->
+    <linearGradient id="cyberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00F5FF"/>
+      <stop offset="50%" style="stop-color:#FF00E5"/>
+      <stop offset="100%" style="stop-color:#FFE500"/>
+    </linearGradient>
+    
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFFFFF"/>
+      <stop offset="100%" style="stop-color:#E0E0E0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1456" height="816" fill="#000000"/>
+  
+  <!-- OpenModel Icon - Multi-node network representing open/multiple models -->
+  <g transform="translate(120, 208)">
+    <!-- Central hub - large circle -->
+    <circle cx="200" cy="200" r="80" fill="none" stroke="url(#cyberGrad)" stroke-width="8"/>
+    <circle cx="200" cy="200" r="50" fill="#00F5FF" opacity="0.3"/>
+    <circle cx="200" cy="200" r="25" fill="#FFFFFF"/>
+    
+    <!-- Outer nodes - representing different models -->
+    <!-- Top node -->
+    <circle cx="200" cy="40" r="35" fill="none" stroke="#00F5FF" stroke-width="5"/>
+    <circle cx="200" cy="40" r="18" fill="#00F5FF"/>
+    <line x1="200" y1="75" x2="200" y2="120" stroke="#00F5FF" stroke-width="4"/>
+    
+    <!-- Top-right node -->
+    <circle cx="340" cy="100" r="35" fill="none" stroke="#FF00E5" stroke-width="5"/>
+    <circle cx="340" cy="100" r="18" fill="#FF00E5"/>
+    <line x1="310" y1="125" x2="260" y2="155" stroke="#FF00E5" stroke-width="4"/>
+    
+    <!-- Right node -->
+    <circle cx="360" cy="200" r="35" fill="none" stroke="#FFE500" stroke-width="5"/>
+    <circle cx="360" cy="200" r="18" fill="#FFE500"/>
+    <line x1="325" y1="200" x2="280" y2="200" stroke="#FFE500" stroke-width="4"/>
+    
+    <!-- Bottom-right node -->
+    <circle cx="340" cy="300" r="35" fill="none" stroke="#00F5FF" stroke-width="5"/>
+    <circle cx="340" cy="300" r="18" fill="#00F5FF"/>
+    <line x1="310" y1="275" x2="260" y2="245" stroke="#00F5FF" stroke-width="4"/>
+    
+    <!-- Bottom node -->
+    <circle cx="200" cy="360" r="35" fill="none" stroke="#FF00E5" stroke-width="5"/>
+    <circle cx="200" cy="360" r="18" fill="#FF00E5"/>
+    <line x1="200" y1="325" x2="200" y2="280" stroke="#FF00E5" stroke-width="4"/>
+    
+    <!-- Bottom-left node -->
+    <circle cx="60" cy="300" r="35" fill="none" stroke="#FFE500" stroke-width="5"/>
+    <circle cx="60" cy="300" r="18" fill="#FFE500"/>
+    <line x1="90" y1="275" x2="140" y2="245" stroke="#FFE500" stroke-width="4"/>
+    
+    <!-- Left node -->
+    <circle cx="40" cy="200" r="35" fill="none" stroke="#00F5FF" stroke-width="5"/>
+    <circle cx="40" cy="200" r="18" fill="#00F5FF"/>
+    <line x1="75" y1="200" x2="120" y2="200" stroke="#00F5FF" stroke-width="4"/>
+    
+    <!-- Top-left node -->
+    <circle cx="60" cy="100" r="35" fill="none" stroke="#FF00E5" stroke-width="5"/>
+    <circle cx="60" cy="100" r="18" fill="#FF00E5"/>
+    <line x1="90" y1="125" x2="140" y2="155" stroke="#FF00E5" stroke-width="4"/>
+    
+    <!-- Inner glow effect -->
+    <circle cx="200" cy="200" r="60" fill="url(#cyberGrad)" opacity="0.15"/>
+  </g>
+  
+  <!-- "openmodel" text -->
+  <text x="520" y="470" font-family="Arial, Helvetica, sans-serif" font-size="160" font-weight="bold" fill="url(#textGrad)">
+    openmodel
+  </text>
+  
+  <!-- Subtitle hint -->
+  <text x="542" y="540" font-family="Arial, Helvetica, sans-serif" font-size="36" fill="#888888">
+    Multi-LLM Gateway
+  </text>
+</svg>

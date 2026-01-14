@@ -99,7 +99,7 @@ Claude Process → Rust Backend → WebSocket → Browser DOM Events → UI Upda
 ## File Structure
 
 ```
-opcode/
+doggy/
 ├── src-tauri/src/
 │   └── web_server.rs           # Main web server implementation
 ├── src/
