@@ -1827,7 +1827,7 @@ pub async fn fetch_github_agents() -> Result<Vec<GitHubAgentFile>, String> {
     info!("Fetching agents from GitHub repository...");
 
     let client = reqwest::Client::new();
-    let url = "https://api.github.com/repos/getAsterisk/opcode/contents/cc_agents";
+    let url = "https://api.github.com/repos/chenxingqiang/doggycontents/cc_agents";
 
     let response = client
         .get(url)
