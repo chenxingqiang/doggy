@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send,
@@ -12,7 +12,9 @@ import {
   Lightbulb,
   Cpu,
   Rocket,
-  
+  Cloud,
+  Bot,
+  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,7 @@ import { FilePicker } from "./FilePicker";
 import { SlashCommandPicker } from "./SlashCommandPicker";
 import { ImagePreview } from "./ImagePreview";
 import { type FileEntry, type SlashCommand } from "@/lib/api";
+import { getGatewaySettings, getGatewayStatus, PROVIDER_INFO, type LLMProvider } from "@/lib/llmGatewayApi";
 
 // Conditional import for Tauri webview window
 let tauriGetCurrentWebviewWindow: any;
@@ -39,9 +42,9 @@ const getCurrentWebviewWindow = tauriGetCurrentWebviewWindow || (() => ({ listen
 
 interface FloatingPromptInputProps {
   /**
-   * Callback when prompt is sent
+   * Callback when prompt is sent - model can be claude or gateway model ID
    */
-  onSend: (prompt: string, model: "sonnet" | "opus") => void;
+  onSend: (prompt: string, model: string) => void;
   /**
    * Whether the input is loading
    */
@@ -53,7 +56,7 @@ interface FloatingPromptInputProps {
   /**
    * Default model to select
    */
-  defaultModel?: "sonnet" | "opus";
+  defaultModel?: string;
   /**
    * Project path for file picker
    */
@@ -173,22 +176,26 @@ const ThinkingModeIndicator: React.FC<{ level: number; color?: string }> = ({ le
 };
 
 type Model = {
-  id: "sonnet" | "opus";
+  id: string;
   name: string;
   description: string;
   icon: React.ReactNode;
   shortName: string;
   color: string;
+  provider?: string; // 'claude' or LLMProvider type
+  isGateway?: boolean;
 };
 
-const MODELS: Model[] = [
+// Default Claude models (always available)
+const DEFAULT_CLAUDE_MODELS: Model[] = [
   {
     id: "sonnet",
     name: "Claude 4 Sonnet",
     description: "Faster, efficient for most tasks",
     icon: <Zap className="h-3.5 w-3.5" />,
     shortName: "S",
-    color: "text-primary"
+    color: "text-cyan",
+    provider: "claude"
   },
   {
     id: "opus",
@@ -196,9 +203,34 @@ const MODELS: Model[] = [
     description: "More capable, better for complex tasks",
     icon: <Zap className="h-3.5 w-3.5" />,
     shortName: "O",
-    color: "text-primary"
+    color: "text-cyan",
+    provider: "claude"
   }
 ];
+
+// Helper to get icon for provider
+const getProviderIcon = (provider: string): React.ReactNode => {
+  switch (provider) {
+    case 'openai': return <Bot className="h-3.5 w-3.5" />;
+    case 'deepseek': return <Cloud className="h-3.5 w-3.5" />;
+    case 'moonshot': return <Sparkles className="h-3.5 w-3.5" />;
+    case 'qwen': return <Cloud className="h-3.5 w-3.5" />;
+    case 'zhipu': return <Brain className="h-3.5 w-3.5" />;
+    case 'groq': return <Rocket className="h-3.5 w-3.5" />;
+    case 'ollama': return <Cpu className="h-3.5 w-3.5" />;
+    default: return <Bot className="h-3.5 w-3.5" />;
+  }
+};
+
+// Helper to get color for provider
+const getProviderColor = (provider: string): string => {
+  const info = PROVIDER_INFO[provider as LLMProvider];
+  if (info) {
+    // Convert hex to tailwind-like class
+    return "text-primary";
+  }
+  return "text-muted-foreground";
+};
 
 /**
  * FloatingPromptInput component - Fixed position prompt input with model picker
@@ -225,7 +257,7 @@ const FloatingPromptInputInner = (
   ref: React.Ref<FloatingPromptInputRef>,
 ) => {
   const [prompt, setPrompt] = useState("");
-  const [selectedModel, setSelectedModel] = useState<"sonnet" | "opus">(defaultModel);
+  const [selectedModel, setSelectedModel] = useState<string>(defaultModel || "sonnet");
   const [selectedThinkingMode, setSelectedThinkingMode] = useState<ThinkingMode>("auto");
   const [isExpanded, setIsExpanded] = useState(false);
   const [modelPickerOpen, setModelPickerOpen] = useState(false);
@@ -237,12 +269,71 @@ const FloatingPromptInputInner = (
   const [cursorPosition, setCursorPosition] = useState(0);
   const [embeddedImages, setEmbeddedImages] = useState<string[]>([]);
   const [dragActive, setDragActive] = useState(false);
+  
+  // Dynamic models from Gateway
+  const [availableModels, setAvailableModels] = useState<Model[]>(DEFAULT_CLAUDE_MODELS);
+  const [gatewayEnabled, setGatewayEnabled] = useState(false);
+  const [isLoadingModels, setIsLoadingModels] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const expandedTextareaRef = useRef<HTMLTextAreaElement>(null);
   const unlistenDragDropRef = useRef<(() => void) | null>(null);
   const [textareaHeight, setTextareaHeight] = useState<number>(48);
   const isIMEComposingRef = useRef(false);
+  
+  // Fetch models from Gateway
+  const fetchGatewayModels = useCallback(async () => {
+    setIsLoadingModels(true);
+    try {
+      const [settings, status] = await Promise.all([
+        getGatewaySettings(),
+        getGatewayStatus()
+      ]);
+      
+      setGatewayEnabled(settings.enabled && status.running);
+      
+      if (settings.enabled && status.running) {
+        // Build models list from enabled providers
+        const gatewayModels: Model[] = [];
+        
+        for (const provider of settings.providers) {
+          if (!provider.enabled) continue;
+          
+          for (const model of provider.models) {
+            gatewayModels.push({
+              id: `${provider.provider}:${model.id}`,
+              name: model.name,
+              description: `${provider.name} • ${model.capabilities.join(', ')}`,
+              icon: getProviderIcon(provider.provider),
+              shortName: model.id.slice(0, 2).toUpperCase(),
+              color: getProviderColor(provider.provider),
+              provider: provider.provider,
+              isGateway: true
+            });
+          }
+        }
+        
+        // Combine Claude models with Gateway models
+        setAvailableModels([...DEFAULT_CLAUDE_MODELS, ...gatewayModels]);
+      } else {
+        setAvailableModels(DEFAULT_CLAUDE_MODELS);
+      }
+    } catch (error) {
+      console.error('[FloatingPromptInput] Failed to fetch gateway models:', error);
+      setAvailableModels(DEFAULT_CLAUDE_MODELS);
+    } finally {
+      setIsLoadingModels(false);
+    }
+  }, []);
+  
+  // Load models on mount and periodically refresh
+  useEffect(() => {
+    fetchGatewayModels();
+    
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchGatewayModels, 30000);
+    return () => clearInterval(interval);
+  }, [fetchGatewayModels]);
 
   // Expose a method to add images programmatically
   React.useImperativeHandle(
@@ -844,7 +935,7 @@ const FloatingPromptInputInner = (
     setPrompt(newPrompt.trim());
   };
 
-  const selectedModelData = MODELS.find(m => m.id === selectedModel) || MODELS[0];
+  const selectedModelData = availableModels.find(m => m.id === selectedModel) || availableModels[0];
 
   return (
     <TooltipProvider>
@@ -930,8 +1021,34 @@ const FloatingPromptInputInner = (
                         </Button>
                       }
                       content={
-                        <div className="w-[300px] p-1">
-                          {MODELS.map((model) => (
+                        <div className="w-[340px] p-1 max-h-[400px] overflow-y-auto">
+                          {/* Refresh button */}
+                          <div className="flex items-center justify-between px-3 py-2 border-b border-border mb-1">
+                            <span className="text-xs text-muted-foreground">
+                              {gatewayEnabled ? `${availableModels.length} models available` : 'Claude models only'}
+                            </span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                fetchGatewayModels();
+                              }}
+                              className={cn(
+                                "p-1 rounded hover:bg-accent transition-colors",
+                                isLoadingModels && "animate-spin"
+                              )}
+                              disabled={isLoadingModels}
+                            >
+                              <RefreshCw className="h-3 w-3" />
+                            </button>
+                          </div>
+                          
+                          {/* Claude models section */}
+                          <div className="px-2 py-1">
+                            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                              Claude (Native)
+                            </div>
+                          </div>
+                          {availableModels.filter(m => !m.isGateway).map((model) => (
                             <button
                               key={model.id}
                               onClick={() => {
@@ -941,7 +1058,7 @@ const FloatingPromptInputInner = (
                               className={cn(
                                 "w-full flex items-start gap-3 p-3 rounded-md transition-colors text-left",
                                 "hover:bg-accent",
-                                selectedModel === model.id && "bg-accent"
+                                selectedModel === model.id && "bg-accent border-l-2 border-primary"
                               )}
                             >
                               <div className="mt-0.5">
@@ -957,6 +1074,55 @@ const FloatingPromptInputInner = (
                               </div>
                             </button>
                           ))}
+                          
+                          {/* Gateway models section */}
+                          {gatewayEnabled && availableModels.filter(m => m.isGateway).length > 0 && (
+                            <>
+                              <div className="px-2 py-1 mt-2">
+                                <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                                  🔀 Gateway Models
+                                </div>
+                              </div>
+                              {availableModels.filter(m => m.isGateway).map((model) => (
+                                <button
+                                  key={model.id}
+                                  onClick={() => {
+                                    setSelectedModel(model.id);
+                                    setModelPickerOpen(false);
+                                  }}
+                                  className={cn(
+                                    "w-full flex items-start gap-3 p-3 rounded-md transition-colors text-left",
+                                    "hover:bg-accent",
+                                    selectedModel === model.id && "bg-accent border-l-2 border-secondary"
+                                  )}
+                                >
+                                  <div className="mt-0.5">
+                                    <span className={model.color}>
+                                      {model.icon}
+                                    </span>
+                                  </div>
+                                  <div className="flex-1 space-y-1">
+                                    <div className="font-medium text-sm flex items-center gap-2">
+                                      {model.name}
+                                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-secondary/20 text-secondary">
+                                        {model.provider}
+                                      </span>
+                                    </div>
+                                    <div className="text-xs text-muted-foreground">
+                                      {model.description}
+                                    </div>
+                                  </div>
+                                </button>
+                              ))}
+                            </>
+                          )}
+                          
+                          {/* No gateway hint */}
+                          {!gatewayEnabled && (
+                            <div className="px-3 py-2 text-xs text-muted-foreground border-t border-border mt-2">
+                              💡 Enable LLM Gateway in Settings for more models
+                            </div>
+                          )}
                         </div>
                       }
                       open={modelPickerOpen}
@@ -1113,8 +1279,25 @@ const FloatingPromptInputInner = (
                       </Tooltip>
                   }
                 content={
-                  <div className="w-[300px] p-1">
-                    {MODELS.map((model) => (
+                  <div className="w-[340px] p-1 max-h-[350px] overflow-y-auto">
+                    {/* Quick refresh */}
+                    <div className="flex items-center justify-between px-2 py-1 border-b border-border mb-1">
+                      <span className="text-[10px] text-muted-foreground">
+                        {availableModels.length} models
+                      </span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          fetchGatewayModels();
+                        }}
+                        className={cn("p-0.5 rounded hover:bg-accent", isLoadingModels && "animate-spin")}
+                      >
+                        <RefreshCw className="h-2.5 w-2.5" />
+                      </button>
+                    </div>
+                    
+                    {/* All models in compact view */}
+                    {availableModels.map((model) => (
                       <button
                         key={model.id}
                         onClick={() => {
@@ -1122,9 +1305,10 @@ const FloatingPromptInputInner = (
                           setModelPickerOpen(false);
                         }}
                         className={cn(
-                          "w-full flex items-start gap-3 p-3 rounded-md transition-colors text-left",
+                          "w-full flex items-start gap-3 p-2 rounded-md transition-colors text-left",
                           "hover:bg-accent",
-                          selectedModel === model.id && "bg-accent"
+                          selectedModel === model.id && "bg-accent border-l-2",
+                          selectedModel === model.id && (model.isGateway ? "border-secondary" : "border-primary")
                         )}
                       >
                         <div className="mt-0.5">
@@ -1132,9 +1316,16 @@ const FloatingPromptInputInner = (
                             {model.icon}
                           </span>
                         </div>
-                        <div className="flex-1 space-y-1">
-                          <div className="font-medium text-sm">{model.name}</div>
-                          <div className="text-xs text-muted-foreground">
+                        <div className="flex-1 space-y-0.5">
+                          <div className="font-medium text-xs flex items-center gap-1.5">
+                            {model.name}
+                            {model.isGateway && (
+                              <span className="text-[8px] px-1 py-0.5 rounded bg-secondary/20 text-secondary">
+                                {model.provider}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[10px] text-muted-foreground line-clamp-1">
                             {model.description}
                           </div>
                         </div>

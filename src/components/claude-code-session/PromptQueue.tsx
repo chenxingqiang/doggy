@@ -1,14 +1,14 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, Sparkles, Zap } from 'lucide-react';
+import { X, Clock, Sparkles, Zap, Bot, Cloud, Brain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-interface QueuedPrompt {
+export interface QueuedPrompt {
   id: string;
   prompt: string;
-  model: "sonnet" | "opus";
+  model: string; // Now supports gateway models like "openai:gpt-4" etc.
 }
 
 interface PromptQueueProps {
@@ -16,6 +16,42 @@ interface PromptQueueProps {
   onRemove: (id: string) => void;
   className?: string;
 }
+
+// Helper to get model display info
+const getModelInfo = (model: string) => {
+  // Check if it's a gateway model (format: "provider:model")
+  if (model.includes(':')) {
+    const [provider, modelId] = model.split(':');
+    const providerIcons: Record<string, React.ReactNode> = {
+      openai: <Bot className="h-3.5 w-3.5 text-green-500" />,
+      deepseek: <Cloud className="h-3.5 w-3.5 text-blue-500" />,
+      moonshot: <Sparkles className="h-3.5 w-3.5 text-purple-500" />,
+      qwen: <Cloud className="h-3.5 w-3.5 text-orange-500" />,
+      zhipu: <Brain className="h-3.5 w-3.5 text-cyan-500" />,
+      groq: <Zap className="h-3.5 w-3.5 text-red-500" />,
+    };
+    return {
+      icon: providerIcons[provider] || <Bot className="h-3.5 w-3.5 text-gray-500" />,
+      name: `${provider}/${modelId}`,
+      isGateway: true
+    };
+  }
+  
+  // Default Claude models
+  if (model === 'opus') {
+    return {
+      icon: <Sparkles className="h-3.5 w-3.5 text-purple-500" />,
+      name: 'Opus',
+      isGateway: false
+    };
+  }
+  
+  return {
+    icon: <Zap className="h-3.5 w-3.5 text-amber-500" />,
+    name: 'Sonnet',
+    isGateway: false
+  };
+};
 
 export const PromptQueue: React.FC<PromptQueueProps> = React.memo(({
   queuedPrompts,
@@ -42,40 +78,45 @@ export const PromptQueue: React.FC<PromptQueueProps> = React.memo(({
         
         <div className="space-y-2 max-h-32 overflow-y-auto">
           <AnimatePresence mode="popLayout">
-            {queuedPrompts.map((queuedPrompt, index) => (
-              <motion.div
-                key={queuedPrompt.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ delay: index * 0.05 }}
-                className="flex items-start gap-2 p-2 rounded-md bg-background/50"
-              >
-                <div className="flex-shrink-0 mt-0.5">
-                  {queuedPrompt.model === "opus" ? (
-                    <Sparkles className="h-3.5 w-3.5 text-purple-500" />
-                  ) : (
-                    <Zap className="h-3.5 w-3.5 text-amber-500" />
-                  )}
-                </div>
-                
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm truncate">{queuedPrompt.prompt}</p>
-                  <span className="text-xs text-muted-foreground">
-                    {queuedPrompt.model === "opus" ? "Opus" : "Sonnet"}
-                  </span>
-                </div>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 flex-shrink-0"
-                  onClick={() => onRemove(queuedPrompt.id)}
+            {queuedPrompts.map((queuedPrompt, index) => {
+              const modelInfo = getModelInfo(queuedPrompt.model);
+              
+              return (
+                <motion.div
+                  key={queuedPrompt.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="flex items-start gap-2 p-2 rounded-md bg-background/50"
                 >
-                  <X className="h-3 w-3" />
-                </Button>
-              </motion.div>
-            ))}
+                  <div className="flex-shrink-0 mt-0.5">
+                    {modelInfo.icon}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm truncate">{queuedPrompt.prompt}</p>
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      {modelInfo.name}
+                      {modelInfo.isGateway && (
+                        <span className="text-[9px] px-1 py-0.5 rounded bg-secondary/30 text-secondary">
+                          Gateway
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                  
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 flex-shrink-0"
+                    onClick={() => onRemove(queuedPrompt.id)}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
       </div>

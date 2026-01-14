@@ -20,7 +20,7 @@ import { useClaudeMessages } from "./claude-code-session/useClaudeMessages";
 import { useCheckpoints } from "./claude-code-session/useCheckpoints";
 import { SessionHeader } from "./claude-code-session/SessionHeader";
 import { MessageList } from "./claude-code-session/MessageList";
-import { PromptQueue } from "./claude-code-session/PromptQueue";
+import { PromptQueue, type QueuedPrompt } from "./claude-code-session/PromptQueue";
 
 interface ClaudeCodeSessionProps {
   session?: Session;
@@ -51,7 +51,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
   const [showSlashCommandsSettings, setShowSlashCommandsSettings] = useState(false);
   const [forkCheckpointId, setForkCheckpointId] = useState<string | null>(null);
   const [forkSessionName, setForkSessionName] = useState("");
-  const [queuedPrompts, setQueuedPrompts] = useState<Array<{ id: string; prompt: string; model: "sonnet" | "opus" }>>([]);
+  const [queuedPrompts, setQueuedPrompts] = useState<QueuedPrompt[]>([]);
   const [showPreview, setShowPreview] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isPreviewMaximized, setIsPreviewMaximized] = useState(false);
@@ -106,7 +106,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
   };
 
   // Handle sending prompts
-  const handleSendPrompt = useCallback(async (prompt: string, model: "sonnet" | "opus") => {
+  const handleSendPrompt = useCallback(async (prompt: string, model: string) => {
     console.log('[TRACE] handleSendPrompt called:');
     console.log('[TRACE]   prompt length:', prompt.length);
     console.log('[TRACE]   model:', model);
