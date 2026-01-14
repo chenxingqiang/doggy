@@ -15,6 +15,7 @@ import {
   Cloud,
   Bot,
   RefreshCw,
+  Gem,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -212,6 +213,7 @@ const DEFAULT_CLAUDE_MODELS: Model[] = [
 const getProviderIcon = (provider: string): React.ReactNode => {
   switch (provider) {
     case 'openai': return <Bot className="h-3.5 w-3.5" />;
+    case 'gemini': return <Gem className="h-3.5 w-3.5" />;
     case 'deepseek': return <Cloud className="h-3.5 w-3.5" />;
     case 'moonshot': return <Sparkles className="h-3.5 w-3.5" />;
     case 'qwen': return <Cloud className="h-3.5 w-3.5" />;

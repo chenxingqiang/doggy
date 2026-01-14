@@ -14,6 +14,7 @@ import { apiCall } from './apiAdapter';
 export type LLMProvider = 
   | 'anthropic'
   | 'openai'
+  | 'gemini'
   | 'deepseek'
   | 'moonshot'
   | 'qwen'
@@ -227,6 +228,7 @@ export async function getGatewayEnvVars(): Promise<Record<string, string>> {
 export const PROVIDER_INFO: Record<LLMProvider, { name: string; icon: string; color: string }> = {
   anthropic: { name: 'Anthropic', icon: '🅰️', color: '#D97706' },
   openai: { name: 'OpenAI', icon: '🤖', color: '#10A37F' },
+  gemini: { name: 'Google Gemini', icon: '💎', color: '#4285F4' },
   deepseek: { name: 'DeepSeek', icon: '🔵', color: '#1E40AF' },
   moonshot: { name: 'Moonshot', icon: '🌙', color: '#7C3AED' },
   qwen: { name: 'Qwen', icon: '☁️', color: '#F97316' },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, Sparkles, Zap, Bot, Cloud, Brain } from 'lucide-react';
+import { X, Clock, Sparkles, Zap, Bot, Cloud, Brain, Gem, Rocket, Cpu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -24,11 +24,13 @@ const getModelInfo = (model: string) => {
     const [provider, modelId] = model.split(':');
     const providerIcons: Record<string, React.ReactNode> = {
       openai: <Bot className="h-3.5 w-3.5 text-green-500" />,
+      gemini: <Gem className="h-3.5 w-3.5 text-blue-400" />,
       deepseek: <Cloud className="h-3.5 w-3.5 text-blue-500" />,
       moonshot: <Sparkles className="h-3.5 w-3.5 text-purple-500" />,
       qwen: <Cloud className="h-3.5 w-3.5 text-orange-500" />,
       zhipu: <Brain className="h-3.5 w-3.5 text-cyan-500" />,
-      groq: <Zap className="h-3.5 w-3.5 text-red-500" />,
+      groq: <Rocket className="h-3.5 w-3.5 text-red-500" />,
+      ollama: <Cpu className="h-3.5 w-3.5 text-green-400" />,
     };
     return {
       icon: providerIcons[provider] || <Bot className="h-3.5 w-3.5 text-gray-500" />,
