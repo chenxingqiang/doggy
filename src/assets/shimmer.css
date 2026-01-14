@@ -98,9 +98,11 @@
   background: linear-gradient(
     105deg,
     currentColor 0%,
-    currentColor 40%,
-    #d97757 50%,
-    currentColor 60%,
+    currentColor 35%,
+    #00F5FF 45%,
+    #FF00E5 50%,
+    #FFE500 55%,
+    currentColor 65%,
     currentColor 100%
   );
   background-size: 200% auto;
@@ -129,9 +131,11 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    transparent 47%,
-    rgba(217, 119, 87, 0.35) 50%,
-    transparent 53%,
+    transparent 40%,
+    rgba(0, 245, 255, 0.4) 45%,
+    rgba(255, 0, 229, 0.4) 50%,
+    rgba(255, 229, 0, 0.4) 55%,
+    transparent 60%,
     transparent 100%
   );
   background-size: 300% auto;
@@ -145,7 +149,8 @@
 
 .rotating-symbol {
   display: inline-block;
-  color: #8B5CF6;
+  color: #00F5FF;
+  text-shadow: 0 0 10px #00F5FF, 0 0 20px #00F5FF;
   font-size: 1.5rem; /* Make it bigger! */
   margin-right: 0.5rem;
   font-weight: bold;
@@ -184,9 +189,11 @@
   background: linear-gradient(
     105deg,
     transparent 0%,
-    transparent 40%,
-    rgba(217, 119, 87, 0.4) 50%,
-    transparent 60%,
+    transparent 35%,
+    rgba(0, 245, 255, 0.3) 42%,
+    rgba(255, 0, 229, 0.3) 50%,
+    rgba(255, 229, 0, 0.3) 58%,
+    transparent 65%,
     transparent 100%
   );
   transform: translateX(-100%) rotate(-10deg);
@@ -202,4 +209,4 @@
 
 .shimmer-hover:hover::before {
   animation: shimmer 1s ease-out;
-} 
+}
