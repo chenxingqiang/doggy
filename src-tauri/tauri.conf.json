@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "opcode",
-  "version": "0.2.1",
-  "identifier": "opcode.asterisk.so",
+  "productName": "Doggy",
+  "version": "0.3.0",
+  "identifier": "io.github.chenxingqiang.doggy",
   "build": {
     "beforeDevCommand": "",
     "beforeBuildCommand": "bun run build",
@@ -12,7 +12,7 @@
     "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "opcode",
+        "title": "Doggy",
         "width": 800,
         "height": 600,
         "decorations": false,
@@ -74,10 +74,10 @@
     ],
     "resources": [],
     "externalBin": [],
-    "copyright": "© 2025 Asterisk. All rights reserved.",
+    "copyright": "© 2025-2026 Chen Xingqiang. All rights reserved.",
     "category": "DeveloperTool",
-    "shortDescription": "GUI app and Toolkit for Claude Code",
-    "longDescription": "opcode is a comprehensive GUI application and toolkit for working with Claude Code, providing an intuitive interface for AI-assisted development.",
+    "shortDescription": "Cyberpunk GUI & Multi-LLM Toolkit for Claude Code",
+    "longDescription": "Doggy is a cyberpunk-themed comprehensive GUI application and multi-LLM toolkit for working with Claude Code, supporting various LLM providers with intelligent routing.",
     "linux": {
       "appimage": {
         "bundleMediaFramework": true

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Cyberpunk Gradient -->
+    <linearGradient id="cyberGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00F5FF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF00E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFE500;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Neon Glow -->
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Circuit Pattern -->
+    <pattern id="circuit" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M0 20h40M20 0v40" stroke="#00F5FF" stroke-width="0.5" opacity="0.3"/>
+      <circle cx="20" cy="20" r="2" fill="#00F5FF" opacity="0.5"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#0D0D0D"/>
+  <rect width="512" height="512" rx="80" fill="url(#circuit)" opacity="0.4"/>
+  
+  <!-- Dog Head Base -->
+  <g filter="url(#neonGlow)">
+    <!-- Head Shape -->
+    <path d="M256 420 
+             C160 420 100 340 100 260 
+             C100 180 160 100 256 100 
+             C352 100 412 180 412 260 
+             C412 340 352 420 256 420Z" 
+          fill="#1A1A2E" stroke="url(#cyberGradient)" stroke-width="4"/>
+    
+    <!-- Left Ear -->
+    <path d="M120 200 L80 80 L180 140 Z" 
+          fill="#1A1A2E" stroke="url(#cyberGradient)" stroke-width="3"/>
+    <path d="M115 180 L90 100 L160 140 Z" 
+          fill="#00F5FF" opacity="0.3"/>
+    
+    <!-- Right Ear -->
+    <path d="M392 200 L432 80 L332 140 Z" 
+          fill="#1A1A2E" stroke="url(#cyberGradient)" stroke-width="3"/>
+    <path d="M397 180 L422 100 L352 140 Z" 
+          fill="#FF00E5" opacity="0.3"/>
+  </g>
+  
+  <!-- Cybernetic Eye Left -->
+  <g>
+    <ellipse cx="180" cy="240" rx="50" ry="45" fill="#0D0D0D" stroke="#00F5FF" stroke-width="3"/>
+    <ellipse cx="180" cy="240" rx="35" ry="30" fill="#00F5FF" opacity="0.2"/>
+    <circle cx="180" cy="240" r="20" fill="#00F5FF"/>
+    <circle cx="180" cy="240" r="10" fill="#0D0D0D"/>
+    <circle cx="172" cy="232" r="5" fill="#FFFFFF" opacity="0.8"/>
+    <!-- Scanner lines -->
+    <line x1="140" y1="240" x2="220" y2="240" stroke="#00F5FF" stroke-width="1" opacity="0.5"/>
+    <line x1="180" y1="200" x2="180" y2="280" stroke="#00F5FF" stroke-width="1" opacity="0.5"/>
+  </g>
+  
+  <!-- Cybernetic Eye Right -->
+  <g>
+    <ellipse cx="332" cy="240" rx="50" ry="45" fill="#0D0D0D" stroke="#FF00E5" stroke-width="3"/>
+    <ellipse cx="332" cy="240" rx="35" ry="30" fill="#FF00E5" opacity="0.2"/>
+    <circle cx="332" cy="240" r="20" fill="#FF00E5"/>
+    <circle cx="332" cy="240" r="10" fill="#0D0D0D"/>
+    <circle cx="324" cy="232" r="5" fill="#FFFFFF" opacity="0.8"/>
+    <!-- Scanner lines -->
+    <line x1="292" y1="240" x2="372" y2="240" stroke="#FF00E5" stroke-width="1" opacity="0.5"/>
+    <line x1="332" y1="200" x2="332" y2="280" stroke="#FF00E5" stroke-width="1" opacity="0.5"/>
+  </g>
+  
+  <!-- Nose (Tech Panel) -->
+  <g>
+    <path d="M230 310 L256 280 L282 310 L270 350 L242 350 Z" 
+          fill="#1A1A2E" stroke="#FFE500" stroke-width="2"/>
+    <circle cx="256" cy="320" r="8" fill="#FFE500"/>
+    <line x1="245" y1="340" x2="267" y2="340" stroke="#FFE500" stroke-width="2"/>
+  </g>
+  
+  <!-- Mouth / Speaker Grille -->
+  <g>
+    <rect x="200" y="360" width="112" height="30" rx="8" fill="#0D0D0D" stroke="#00F5FF" stroke-width="2"/>
+    <line x1="215" y1="368" x2="215" y2="382" stroke="#00F5FF" stroke-width="2" opacity="0.8"/>
+    <line x1="235" y1="368" x2="235" y2="382" stroke="#FF00E5" stroke-width="2" opacity="0.8"/>
+    <line x1="256" y1="368" x2="256" y2="382" stroke="#FFE500" stroke-width="2" opacity="0.8"/>
+    <line x1="277" y1="368" x2="277" y2="382" stroke="#FF00E5" stroke-width="2" opacity="0.8"/>
+    <line x1="297" y1="368" x2="297" y2="382" stroke="#00F5FF" stroke-width="2" opacity="0.8"/>
+  </g>
+  
+  <!-- Circuit Lines on Face -->
+  <g stroke="#00F5FF" stroke-width="1.5" opacity="0.6" fill="none">
+    <path d="M130 280 L160 300 L180 290"/>
+    <path d="M382 280 L352 300 L332 290"/>
+    <path d="M200 180 L220 200 L200 220"/>
+    <path d="M312 180 L292 200 L312 220"/>
+  </g>
+  
+  <!-- Antenna / Sensor -->
+  <g>
+    <line x1="256" y1="100" x2="256" y2="60" stroke="#FFE500" stroke-width="3"/>
+    <circle cx="256" cy="50" r="12" fill="#FFE500" filter="url(#neonGlow)"/>
+    <circle cx="256" cy="50" r="6" fill="#0D0D0D"/>
+  </g>
+  
+  <!-- Tech Details -->
+  <g fill="#00F5FF" opacity="0.4">
+    <rect x="120" y="300" width="30" height="4" rx="2"/>
+    <rect x="120" y="310" width="20" height="4" rx="2"/>
+    <rect x="362" y="300" width="30" height="4" rx="2"/>
+    <rect x="372" y="310" width="20" height="4" rx="2"/>
+  </g>
+</svg>

@@ -36,6 +36,11 @@ use commands::mcp::{
     mcp_serve, mcp_test_connection,
 };
 
+use commands::llm_gateway::{
+    get_default_llm_providers, get_gateway_env_vars, get_llm_gateway_settings,
+    get_llm_gateway_status, save_llm_gateway_settings, start_llm_gateway, stop_llm_gateway,
+    test_llm_provider, LLMGatewayState,
+};
 use commands::proxy::{apply_proxy_settings, get_proxy_settings, save_proxy_settings};
 use commands::storage::{
     storage_delete_row, storage_execute_sql, storage_insert_row, storage_list_tables,
@@ -146,6 +151,9 @@ fn main() {
 
             // Initialize Claude process state
             app.manage(ClaudeProcessState::default());
+
+            // Initialize LLM Gateway state
+            app.manage(LLMGatewayState::default());
 
             // Apply window vibrancy with rounded corners on macOS
             #[cfg(target_os = "macos")]
@@ -289,6 +297,15 @@ fn main() {
             // Proxy Settings
             get_proxy_settings,
             save_proxy_settings,
+            // LLM Gateway
+            get_llm_gateway_settings,
+            save_llm_gateway_settings,
+            get_llm_gateway_status,
+            start_llm_gateway,
+            stop_llm_gateway,
+            test_llm_provider,
+            get_default_llm_providers,
+            get_gateway_env_vars,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import opcodeLogo from "../../src-tauri/icons/icon.png";
+import doggyLogo from "../../src-tauri/icons/icon.png";
 import type { CSSProperties } from "react";
 
 /**
@@ -20,7 +20,7 @@ export function StartupIntro({ visible }: { visible: boolean }) {
           className="fixed inset-0 z-[60] flex items-center justify-center bg-background"
           aria-hidden="true"
         >
-          {/* Ambient radial glow */}
+          {/* Ambient radial glow - cyberpunk cyan/magenta */}
           <motion.div
             className="absolute inset-0"
             initial={{ opacity: 0 }}
@@ -28,7 +28,7 @@ export function StartupIntro({ visible }: { visible: boolean }) {
             transition={{ duration: 0.25 }}
             style={{
               background:
-                "radial-gradient(800px circle at 50% 55%, var(--color-primary)/8, transparent 65%)",
+                "radial-gradient(800px circle at 50% 55%, rgba(0,245,255,0.08), transparent 65%)",
               pointerEvents: "none",
             } as CSSProperties}
           />
@@ -50,7 +50,7 @@ export function StartupIntro({ visible }: { visible: boolean }) {
             className="relative flex flex-col items-center justify-center gap-1"
           >
 
-            {/* opcode logo slides left; brand text reveals to the right */}
+            {/* Doggy logo slides left; brand text reveals to the right */}
             <div className="relative flex items-center justify-center">
               {/* Logo wrapper that gently slides left */}
               <motion.div
@@ -60,14 +60,15 @@ export function StartupIntro({ visible }: { visible: boolean }) {
                 transition={{ duration: 0.35, ease: "easeOut", delay: 0.2 }}
               >
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-primary/15 blur-2xl"
+                  className="absolute inset-0 rounded-full blur-2xl"
+                  style={{ background: "linear-gradient(135deg, rgba(0,245,255,0.2), rgba(255,0,229,0.2))" }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: [0, 1, 0.9] }}
                   transition={{ duration: 0.9, ease: "easeOut" }}
                 />
                 <motion.img
-                  src={opcodeLogo}
-                  alt="opcode"
+                  src={doggyLogo}
+                  alt="Doggy"
                   className="h-20 w-20 rounded-lg shadow-sm"
                   transition={{ repeat: Infinity, repeatType: "loop", ease: "linear", duration: 0.5 }}
                 />
@@ -97,8 +98,8 @@ export default StartupIntro;
 function BrandText() {
   return (
     <div className="text-5xl font-extrabold tracking-tight brand-text">
-      <span className="brand-text-solid">opcode</span>
-      <span aria-hidden="true" className="brand-text-shimmer">opcode</span>
+      <span className="brand-text-solid">Doggy</span>
+      <span aria-hidden="true" className="brand-text-shimmer">Doggy</span>
     </div>
   );
 }

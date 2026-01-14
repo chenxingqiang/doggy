@@ -1,62 +1,55 @@
 
 <div align="center">
-  <img src="src-tauri/icons/icon.png" alt="opcode Logo" width="120" height="120">
+  <img src="src-tauri/icons/icon.png" alt="Doggy Logo" width="120" height="120">
 
-  <h1>opcode</h1>
+  <h1>🐕 Doggy</h1>
   
   <p>
-    <strong>A powerful GUI app and Toolkit for Claude Code</strong>
+    <strong>A Cyberpunk Multi-LLM Toolkit & GUI for Claude Code</strong>
   </p>
   <p>
-    <strong>Create custom agents, manage interactive Claude Code sessions, run secure background agents, and more.</strong>
+    <strong>Create custom agents, manage sessions, and use multiple AI models with intelligent routing.</strong>
   </p>
   
   <p>
-    <a href="#features"><img src="https://img.shields.io/badge/Features-✨-blue?style=for-the-badge" alt="Features"></a>
-    <a href="#installation"><img src="https://img.shields.io/badge/Install-🚀-green?style=for-the-badge" alt="Installation"></a>
-    <a href="#usage"><img src="https://img.shields.io/badge/Usage-📖-purple?style=for-the-badge" alt="Usage"></a>
-    <a href="#development"><img src="https://img.shields.io/badge/Develop-🛠️-orange?style=for-the-badge" alt="Development"></a>
-    <a href="https://discord.com/invite/KYwhHVzUsY"><img src="https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
+    <a href="#features"><img src="https://img.shields.io/badge/Features-✨-00F5FF?style=for-the-badge" alt="Features"></a>
+    <a href="#installation"><img src="https://img.shields.io/badge/Install-🚀-FF00E5?style=for-the-badge" alt="Installation"></a>
+    <a href="#usage"><img src="https://img.shields.io/badge/Usage-📖-FFE500?style=for-the-badge" alt="Usage"></a>
+    <a href="#development"><img src="https://img.shields.io/badge/Develop-🛠️-00F5FF?style=for-the-badge" alt="Development"></a>
   </p>
 </div>
 
-![457013521-6133a738-d0cb-4d3e-8746-c6768c82672c](https://github.com/user-attachments/assets/a028de9e-d881-44d8-bae5-7326ab3558b9)
-
-
-
-https://github.com/user-attachments/assets/6bceea0f-60b6-4c3e-a745-b891de00b8d0
-
-
-
-> [!TIP]
-> **⭐ Star the repo and follow [@getAsterisk](https://x.com/getAsterisk) on X for early access to `asteria-swe-v0`**.
+---
 
 > [!NOTE]
 > This project is not affiliated with, endorsed by, or sponsored by Anthropic. Claude is a trademark of Anthropic, PBC. This is an independent developer project using Claude.
 
 ## 🌟 Overview
 
-**opcode** is a powerful desktop application that transforms how you interact with Claude Code. Built with Tauri 2, it provides a beautiful GUI for managing your Claude Code sessions, creating custom agents, tracking usage, and much more.
+**Doggy** is a cyberpunk-themed desktop application that transforms how you interact with Claude Code and other LLM providers. Built with Tauri 2, it provides a beautiful GUI for managing your Claude Code sessions, creating custom agents, tracking usage, and **supporting multiple LLM providers with intelligent routing**.
 
-Think of opcode as your command center for Claude Code - bridging the gap between the command-line tool and a visual experience that makes AI-assisted development more intuitive and productive.
+Think of Doggy as your command center for AI-assisted development - bridging the gap between command-line tools and a visual experience that makes working with various AI models more intuitive and productive.
+
+### 🎨 Key Highlights
+
+- 🐕 **Cyberpunk Aesthetic**: Beautiful neon-styled interface with cyan, magenta, and yellow accents
+- 🌐 **Multi-LLM Support**: Use OpenAI, DeepSeek, Moonshot, Qwen, Zhipu, Groq, Ollama and more
+- 🧠 **Intelligent Routing**: Auto-select optimal models based on task type
+- 💰 **Cost Optimization**: Smart routing to reduce API costs
+- 🔄 **Failover Protection**: Automatic switching when providers fail
 
 ## 📋 Table of Contents
 
 - [🌟 Overview](#-overview)
 - [✨ Features](#-features)
+  - [🌐 LLM Gateway](#-llm-gateway-multi-model-proxy)
   - [🗂️ Project & Session Management](#️-project--session-management)
   - [🤖 CC Agents](#-cc-agents)
-  
   - [📊 Usage Analytics Dashboard](#-usage-analytics-dashboard)
   - [🔌 MCP Server Management](#-mcp-server-management)
   - [⏰ Timeline & Checkpoints](#-timeline--checkpoints)
   - [📝 CLAUDE.md Management](#-claudemd-management)
 - [📖 Usage](#-usage)
-  - [Getting Started](#getting-started)
-  - [Managing Projects](#managing-projects)
-  - [Creating Agents](#creating-agents)
-  - [Tracking Usage](#tracking-usage)
-  - [Working with MCP Servers](#working-with-mcp-servers)
 - [🚀 Installation](#-installation)
 - [🔨 Build from Source](#-build-from-source)
 - [🛠️ Development](#️-development)
@@ -66,6 +59,27 @@ Think of opcode as your command center for Claude Code - bridging the gap betwee
 - [🙏 Acknowledgments](#-acknowledgments)
 
 ## ✨ Features
+
+### 🌐 **LLM Gateway (Multi-Model Proxy)**
+
+The crown jewel of Doggy - bypass Claude Code's model restrictions and use any LLM provider!
+
+| Provider | Models | Features |
+|----------|--------|----------|
+| **OpenAI** | GPT-4o, GPT-4-turbo, o1, o3-mini | Function calling, vision |
+| **DeepSeek** | DeepSeek-V3, DeepSeek-R1 | Reasoning, coding |
+| **Moonshot** | Moonshot-v1-8k/32k/128k | Long context |
+| **Qwen** | Qwen-Max, Qwen-Plus, Qwen-Turbo | Chinese optimization |
+| **Zhipu AI** | GLM-4, GLM-4V | Vision, tools |
+| **Groq** | Llama-3, Mixtral | Ultra-fast inference |
+| **Ollama** | Any local model | Privacy, offline |
+
+**Key Features:**
+- 🎯 **Intelligent Routing**: Automatically select the best model for coding, reasoning, or creative tasks
+- 💰 **Cost Optimization**: Route to cheaper models when appropriate
+- 🔄 **Automatic Failover**: Switch to backup providers when primary fails
+- 🖥️ **Local Gateway Server**: Run a local proxy for seamless integration
+- ⚙️ **Easy Configuration**: Visual UI for managing API keys and settings
 
 ### 🗂️ **Project & Session Management**
 - **Visual Project Browser**: Navigate through all your Claude Code projects in `~/.claude/projects/`
@@ -78,8 +92,6 @@ Think of opcode as your command center for Claude Code - bridging the gap betwee
 - **Agent Library**: Build a collection of purpose-built agents for different tasks
 - **Background Execution**: Run agents in separate processes for non-blocking operations
 - **Execution History**: Track all agent runs with detailed logs and performance metrics
-
-
 
 ### 📊 **Usage Analytics Dashboard**
 - **Cost Tracking**: Monitor your Claude API usage and costs in real-time
@@ -110,9 +122,21 @@ Think of opcode as your command center for Claude Code - bridging the gap betwee
 
 ### Getting Started
 
-1. **Launch opcode**: Open the application after installation
+1. **Launch Doggy**: Open the application after installation
 2. **Welcome Screen**: Choose between CC Agents or Projects
-3. **First Time Setup**: opcode will automatically detect your `~/.claude` directory
+3. **First Time Setup**: Doggy will automatically detect your `~/.claude` directory
+
+### Setting Up LLM Gateway
+
+1. Go to **Settings** → **LLM Gateway** tab
+2. Enable the gateway and set port (default: 8765)
+3. Add your providers:
+   - Click "Add Provider"
+   - Enter API key and base URL
+   - Select available models
+   - Set priority for routing
+4. Enable "Intelligent Routing" for automatic model selection
+5. Click "Start Gateway" to begin
 
 ### Managing Projects
 
@@ -161,13 +185,15 @@ Menu → MCP Manager → Add Server → Configure
 
 - **Claude Code CLI**: Install from [Claude's official site](https://claude.ai/code)
 
-### Release Executables Will Be Published Soon
+### Release Executables
+
+Coming soon! Build from source for now.
 
 ## 🔨 Build from Source
 
 ### Prerequisites
 
-Before building opcode from source, ensure you have the following installed:
+Before building Doggy from source, ensure you have the following installed:
 
 #### System Requirements
 
@@ -179,19 +205,16 @@ Before building opcode from source, ensure you have the following installed:
 
 1. **Rust** (1.70.0 or later)
    ```bash
-   # Install via rustup
    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    ```
 
 2. **Bun** (latest version)
    ```bash
-   # Install bun
    curl -fsSL https://bun.sh/install | bash
    ```
 
 3. **Git**
    ```bash
-   # Usually pre-installed, but if not:
    # Ubuntu/Debian: sudo apt install git
    # macOS: brew install git
    # Windows: Download from https://git-scm.com
@@ -205,7 +228,6 @@ Before building opcode from source, ensure you have the following installed:
 
 **Linux (Ubuntu/Debian)**
 ```bash
-# Install system dependencies
 sudo apt update
 sudo apt install -y \
   libwebkit2gtk-4.1-dev \
@@ -225,23 +247,20 @@ sudo apt install -y \
 
 **macOS**
 ```bash
-# Install Xcode Command Line Tools
 xcode-select --install
-
-# Install additional dependencies via Homebrew (optional)
 brew install pkg-config
 ```
 
 **Windows**
 - Install [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
-- Install [WebView2](https://developer.microsoft.com/microsoft-edge/webview2/) (usually pre-installed on Windows 11)
+- Install [WebView2](https://developer.microsoft.com/microsoft-edge/webview2/)
 
 ### Build Steps
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/getAsterisk/opcode.git
-   cd opcode
+   git clone https://github.com/chenxingqiang/doggy.git
+   cd doggy
    ```
 
 2. **Install Frontend Dependencies**
@@ -258,77 +277,26 @@ brew install pkg-config
    
    **For Production Build**
    ```bash
-   # Build the application
    bun run tauri build
-   
-   # The built executable will be in:
-   # - Linux: src-tauri/target/release/
-   # - macOS: src-tauri/target/release/
-   # - Windows: src-tauri/target/release/
    ```
 
 4. **Platform-Specific Build Options**
-   
-   **Debug Build (faster compilation, larger binary)**
-   ```bash
-   bun run tauri build --debug
-   ```
    
    **Universal Binary for macOS (Intel + Apple Silicon)**
    ```bash
    bun run tauri build --target universal-apple-darwin
    ```
 
-### Troubleshooting
-
-#### Common Issues
-
-1. **"cargo not found" error**
-   - Ensure Rust is installed and `~/.cargo/bin` is in your PATH
-   - Run `source ~/.cargo/env` or restart your terminal
-
-2. **Linux: "webkit2gtk not found" error**
-   - Install the webkit2gtk development packages listed above
-   - On newer Ubuntu versions, you might need `libwebkit2gtk-4.0-dev`
-
-3. **Windows: "MSVC not found" error**
-   - Install Visual Studio Build Tools with C++ support
-   - Restart your terminal after installation
-
-4. **"claude command not found" error**
-   - Ensure Claude Code CLI is installed and in your PATH
-   - Test with `claude --version`
-
-5. **Build fails with "out of memory"**
-   - Try building with fewer parallel jobs: `cargo build -j 2`
-   - Close other applications to free up RAM
-
-#### Verify Your Build
-
-After building, you can verify the application works:
+### Verify Your Build
 
 ```bash
-# Run the built executable directly
+# Run the built executable
 # Linux/macOS
-./src-tauri/target/release/opcode
+./src-tauri/target/release/doggy
 
 # Windows
-./src-tauri/target/release/opcode.exe
+./src-tauri/target/release/doggy.exe
 ```
-
-### Build Artifacts
-
-The build process creates several artifacts:
-
-- **Executable**: The main opcode application
-- **Installers** (when using `tauri build`):
-  - `.deb` package (Linux)
-  - `.AppImage` (Linux)
-  - `.dmg` installer (macOS)
-  - `.msi` installer (Windows)
-  - `.exe` installer (Windows)
-
-All artifacts are located in `src-tauri/target/release/`.
 
 ## 🛠️ Development
 
@@ -343,7 +311,7 @@ All artifacts are located in `src-tauri/target/release/`.
 ### Project Structure
 
 ```
-opcode/
+doggy/
 ├── src/                   # React frontend
 │   ├── components/        # UI components
 │   ├── lib/               # API client & utilities
@@ -354,7 +322,7 @@ opcode/
 │   │   ├── checkpoint/    # Timeline management
 │   │   └── process/       # Process management
 │   └── tests/             # Rust test suite
-└── public/                # Public assets
+└── scripts/               # Build scripts
 ```
 
 ### Development Commands
@@ -372,19 +340,20 @@ bunx tsc --noEmit
 # Run Rust tests
 cd src-tauri && cargo test
 
-# Format code
-cd src-tauri && cargo fmt
+# Generate icons from SVG
+node scripts/generate-icons.js
 ```
 
 ## 🔒 Security
 
-opcode prioritizes your privacy and security:
+Doggy prioritizes your privacy and security:
 
 1. **Process Isolation**: Agents run in separate processes
 2. **Permission Control**: Configure file and network access per agent
 3. **Local Storage**: All data stays on your machine
 4. **No Telemetry**: No data collection or tracking
 5. **Open Source**: Full transparency through open source code
+6. **API Key Security**: Keys stored locally, never transmitted to third parties
 
 ## 🤝 Contributing
 
@@ -398,6 +367,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 - 🎨 UI/UX enhancements
 - 🧪 Test coverage
 - 🌐 Internationalization
+- 🔌 New LLM provider integrations
 
 ## 📄 License
 
@@ -407,21 +377,22 @@ This project is licensed under the AGPL License - see the [LICENSE](LICENSE) fil
 
 - Built with [Tauri](https://tauri.app/) - The secure framework for building desktop apps
 - [Claude](https://claude.ai) by Anthropic
+- Original opcode project by [Asterisk](https://asterisk.so/)
+- Inspired by [claude-code-open](https://github.com/chenxingqiang/claude-code-open)
 
 ---
 
 <div align="center">
   <p>
-    <strong>Made with ❤️ by the <a href="https://asterisk.so/">Asterisk</a></strong>
+    <strong>Made with 🐕 by <a href="https://github.com/chenxingqiang">Chen Xingqiang</a></strong>
   </p>
   <p>
-    <a href="https://github.com/getAsterisk/opcode/issues">Report Bug</a>
+    <a href="https://github.com/chenxingqiang/doggy/issues">Report Bug</a>
     ·
-    <a href="https://github.com/getAsterisk/opcode/issues">Request Feature</a>
+    <a href="https://github.com/chenxingqiang/doggy/issues">Request Feature</a>
   </p>
 </div>
 
-
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=getAsterisk/opcode&type=Date)](https://www.star-history.com/#getAsterisk/opcode&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=chenxingqiang/doggy&type=Date)](https://www.star-history.com/#chenxingqiang/doggy&Date)
