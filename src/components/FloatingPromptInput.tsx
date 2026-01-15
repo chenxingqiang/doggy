@@ -185,6 +185,7 @@ type Model = {
   color: string;
   provider?: string; // 'claude' or LLMProvider type
   isGateway?: boolean;
+  disabled?: boolean; // Model unavailable (e.g., gateway not running)
 };
 
 // Default Claude models (always available)
@@ -292,34 +293,34 @@ const FloatingPromptInputInner = (
         getGatewayStatus()
       ]);
       
-      setGatewayEnabled(settings.enabled && status.running);
+      const isRunning = settings.enabled && status.running;
+      setGatewayEnabled(isRunning);
       
-      if (settings.enabled && status.running) {
-        // Build models list from enabled providers
-        const gatewayModels: Model[] = [];
+      // Build models list from enabled providers (show even if gateway not running)
+      const gatewayModels: Model[] = [];
+      
+      for (const provider of settings.providers) {
+        if (!provider.enabled) continue;
         
-        for (const provider of settings.providers) {
-          if (!provider.enabled) continue;
-          
-          for (const model of provider.models) {
-            gatewayModels.push({
-              id: `${provider.provider}:${model.id}`,
-              name: model.name,
-              description: `${provider.name} • ${model.capabilities.join(', ')}`,
-              icon: getProviderIcon(provider.provider),
-              shortName: model.id.slice(0, 2).toUpperCase(),
-              color: getProviderColor(provider.provider),
-              provider: provider.provider,
-              isGateway: true
-            });
-          }
+        for (const model of provider.models) {
+          gatewayModels.push({
+            id: `${provider.provider}:${model.id}`,
+            name: model.name,
+            description: isRunning 
+              ? `${provider.name} • ${model.capabilities.join(', ')}`
+              : `${provider.name} • ⚠️ Gateway not running`,
+            icon: getProviderIcon(provider.provider),
+            shortName: model.id.slice(0, 2).toUpperCase(),
+            color: getProviderColor(provider.provider),
+            provider: provider.provider,
+            isGateway: true,
+            disabled: !isRunning  // Mark as disabled if gateway not running
+          });
         }
-        
-        // Combine Claude models with Gateway models
-        setAvailableModels([...DEFAULT_CLAUDE_MODELS, ...gatewayModels]);
-      } else {
-        setAvailableModels(DEFAULT_CLAUDE_MODELS);
       }
+      
+      // Combine Claude models with Gateway models
+      setAvailableModels([...DEFAULT_CLAUDE_MODELS, ...gatewayModels]);
     } catch (error) {
       console.error('[FloatingPromptInput] Failed to fetch gateway models:', error);
       setAvailableModels(DEFAULT_CLAUDE_MODELS);
@@ -1284,9 +1285,24 @@ const FloatingPromptInputInner = (
                   <div className="w-[340px] p-1 max-h-[350px] overflow-y-auto">
                     {/* Quick refresh */}
                     <div className="flex items-center justify-between px-2 py-1 border-b border-border mb-1">
-                      <span className="text-[10px] text-muted-foreground">
-                        {availableModels.length} models
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-muted-foreground">
+                          {availableModels.length} models
+                        </span>
+                        {/* Gateway status indicator */}
+                        <span className={cn(
+                          "text-[8px] px-1.5 py-0.5 rounded flex items-center gap-1",
+                          gatewayEnabled 
+                            ? "bg-green-500/20 text-green-500" 
+                            : "bg-yellow-500/20 text-yellow-500"
+                        )}>
+                          <span className={cn(
+                            "w-1.5 h-1.5 rounded-full",
+                            gatewayEnabled ? "bg-green-500" : "bg-yellow-500"
+                          )} />
+                          {gatewayEnabled ? "Gateway ON" : "Gateway OFF"}
+                        </span>
+                      </div>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -1298,23 +1314,32 @@ const FloatingPromptInputInner = (
                       </button>
                     </div>
                     
+                    {/* Gateway hint when not running */}
+                    {!gatewayEnabled && availableModels.some(m => m.isGateway) && (
+                      <div className="mx-2 mb-2 p-2 rounded bg-yellow-500/10 border border-yellow-500/20 text-[10px] text-yellow-500">
+                        💡 Start LLM Gateway in Settings to use other models
+                      </div>
+                    )}
+                    
                     {/* All models in compact view */}
                     {availableModels.map((model) => (
                       <button
                         key={model.id}
                         onClick={() => {
+                          if (model.disabled) return; // Don't select disabled models
                           setSelectedModel(model.id);
                           setModelPickerOpen(false);
                         }}
+                        disabled={model.disabled}
                         className={cn(
                           "w-full flex items-start gap-3 p-2 rounded-md transition-colors text-left",
-                          "hover:bg-accent",
-                          selectedModel === model.id && "bg-accent border-l-2",
-                          selectedModel === model.id && (model.isGateway ? "border-secondary" : "border-primary")
+                          model.disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-accent",
+                          selectedModel === model.id && !model.disabled && "bg-accent border-l-2",
+                          selectedModel === model.id && !model.disabled && (model.isGateway ? "border-secondary" : "border-primary")
                         )}
                       >
                         <div className="mt-0.5">
-                          <span className={model.color}>
+                          <span className={model.disabled ? "text-muted-foreground" : model.color}>
                             {model.icon}
                           </span>
                         </div>
@@ -1322,8 +1347,13 @@ const FloatingPromptInputInner = (
                           <div className="font-medium text-xs flex items-center gap-1.5">
                             {model.name}
                             {model.isGateway && (
-                              <span className="text-[8px] px-1 py-0.5 rounded bg-secondary/20 text-secondary">
-                                {model.provider}
+                              <span className={cn(
+                                "text-[8px] px-1 py-0.5 rounded",
+                                model.disabled 
+                                  ? "bg-yellow-500/20 text-yellow-500" 
+                                  : "bg-secondary/20 text-secondary"
+                              )}>
+                                {model.disabled ? "⚠️ offline" : model.provider}
                               </span>
                             )}
                           </div>
